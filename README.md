@@ -10,5 +10,7 @@
 
 ### What is a prime number?
 
-* [en.wikipedia.org/wiki/Prime_number](https://en.wikipedia.org/wiki/Prime_number)
-
+* [Prime number](https://en.wikipedia.org/wiki/Prime_number)
+* [Prime number theorem](https://en.wikipedia.org/wiki/Prime_number_theorem)
+* [Euclid Euler theorem](https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem)
+* [Bernhard Riemann](https://en.wikipedia.org/wiki/Bernhard_Riemann)
