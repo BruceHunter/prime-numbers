@@ -10,5 +10,5 @@
 
 ### What is a prime number?
 
-[en.wikipedia.org/wiki/Prime_number](https://en.wikipedia.org/wiki/Prime_number)
+* [en.wikipedia.org/wiki/Prime_number](https://en.wikipedia.org/wiki/Prime_number)
 
