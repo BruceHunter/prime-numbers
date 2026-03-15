@@ -58,36 +58,96 @@ Verified against OEIS landmark values:
 
 A **prime number** is a natural number greater than 1 whose only positive divisors are 1 and itself. The number 1 is *not* prime by convention (it has only one divisor). The sequence begins:
 
-```
-2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, ...
-```
+$$2,\ 3,\ 5,\ 7,\ 11,\ 13,\ 17,\ 19,\ 23,\ 29,\ 31,\ 37,\ 41,\ 43,\ 47,\ \ldots$$
 
 Key properties:
 - **2** is the only even prime.
 - There are infinitely many primes (proved by **Euclid**, ~300 BCE).
-- Every integer ≥ 2 factors uniquely into primes — the **Fundamental Theorem of Arithmetic**.
+- Every integer $\geq 2$ factors uniquely into primes — the **Fundamental Theorem of Arithmetic**.
 
 ---
 
-## The Prime Counting Function π(x)
+## What Can You Do With Primes?
 
-`π(x)` counts the number of primes ≤ x. Selected exact values:
+Prime numbers aren't just mathematical curiosities — they are foundational to modern technology and science.
 
-| x                 | π(x)              | In this repo?                    |
-|-------------------|-------------------|----------------------------------|
-| 10                | 4                 | ✓                                |
-| 100               | 25                | ✓                                |
-| 1,000             | 168               | ✓                                |
-| 10,000            | 1,229             | ✓                                |
-| 100,000           | 9,592             | ✓                                |
-| 1,000,000         | 78,498            | ✓                                |
-| 10,000,000        | 664,579           | ✓                                |
-| 100,000,000       | 5,761,455         | ✓                                |
-| 1,000,000,000     | 50,847,534        | ✓                                |
-| 10,000,000,000    | 455,052,511       | ✓                                |
-| 22,801,763,489    | 1,000,000,000     | ✓ last prime (file `1000000k`)   |
-| 100,000,000,000   | 4,118,054,813     | —                                |
-| 1,000,000,000,000 | 37,607,912,018    | —                                |
+### Cryptography & Security
+
+Nearly all public-key cryptography depends on the difficulty of problems involving large primes:
+
+- **RSA encryption** — The security of RSA rests on the fact that multiplying two large primes is easy but factoring their product is computationally infeasible. An RSA key is computed as:
+
+$$n = p \cdot q$$
+
+  where $p$ and $q$ are large primes (typically 1024+ bits each). Breaking RSA means factoring $n$ — no known efficient algorithm exists for classical computers.
+
+- **Diffie-Hellman key exchange** — Uses a large prime $p$ and a generator $g$ of the multiplicative group $(\mathbb{Z}/p\mathbb{Z})^*$. Two parties exchange $g^a \bmod p$ and $g^b \bmod p$ to arrive at a shared secret $g^{ab} \bmod p$ without ever transmitting $a$ or $b$.
+
+- **Elliptic Curve Cryptography (ECC)** — Operates over finite fields $\mathbb{F}_p$ for a prime $p$. ECC provides equivalent security to RSA with much smaller keys (256-bit ECC ≈ 3072-bit RSA).
+
+- **Digital signatures** (DSA, ECDSA), **TLS/HTTPS**, **SSH**, **PGP/GPG**, **cryptocurrency wallets** — all rely on prime-based math.
+
+### Hash Tables & Data Structures
+
+- **Hash table sizing** — Using a prime number for the table size minimizes clustering in open addressing and chaining. If $m$ is prime, the hash function $h(k) = k \bmod m$ distributes keys more uniformly.
+- **Double hashing** — The step size in double hashing schemes is often chosen as a prime to guarantee all slots are visited.
+- **Bloom filters** — Use $k$ independent hash functions, often designed using prime moduli.
+
+### Error Detection & Correction
+
+- **Cyclic Redundancy Checks (CRC)** — CRC polynomials are chosen to be irreducible over $\mathbb{F}_2$, a concept directly analogous to primality.
+- **Reed-Solomon codes** — Operate over finite fields $\mathbb{F}_{p^k}$, used in QR codes, CDs, DVDs, satellite communications, and deep-space probes (Voyager, Mars rovers).
+
+### Random Number Generation
+
+- **Linear congruential generators** — The modulus is often a large prime (e.g., the Mersenne prime $2^{31} - 1 = 2{,}147{,}483{,}647$ in many implementations).
+- **Cryptographically secure PRNGs** rely on prime-field arithmetic (e.g., Blum Blum Shub: $x_{n+1} = x_n^2 \bmod M$, where $M = pq$ for primes $p, q \equiv 3 \pmod{4}$).
+
+### Number Theory & Pure Mathematics
+
+- **Testing conjectures** — Having a dataset of 1 billion primes lets researchers verify conjectures (twin primes, Goldbach, prime gaps, etc.) up to $22.8 \times 10^9$.
+- **Computational experiments** — Prime distribution patterns, prime gaps statistics, counts of special prime types.
+- **Benchmarking algorithms** — Verifying the output of new sieve implementations or primality tests.
+
+### Signal Processing & Physics
+
+- **Quasi-random sampling** — Prime-based spacing produces low-discrepancy sequences, useful in Monte Carlo integration and computer graphics.
+- **Cicada life cycles** — Periodical cicadas emerge on 13- and 17-year cycles (both primes), hypothesized to minimize predator synchronization.
+- **Nuclear physics** — Energy levels of certain heavy nuclei show statistical spacing distributions related to the zeros of the Riemann zeta function — a deep and still mysterious connection between primes and physics.
+
+### Computer Science & Algorithms
+
+- **Rabin-Karp string matching** — Computes rolling hashes modulo a prime to efficiently find substring matches in $O(n)$ expected time.
+- **Universal hashing** — Hash families parameterized by random coefficients over $\mathbb{F}_p$ provide provably low collision probability.
+- **Primality certificates** — Pratt certificates and ECPP certificates provide independently verifiable proofs that a number is prime.
+- **Miller-Rabin testing** — A list of known primes provides deterministic witness sets. For all $n < 3{,}215{,}031{,}751$, the witnesses $\{2, 3, 5, 7\}$ are sufficient.
+
+### Education
+
+- **Learning tool** — A billion primes in plain text is directly usable in any programming language for teaching number theory, algorithms, and data analysis.
+- **Programming exercises** — Sieving, searching, gap analysis, twin prime enumeration, Goldbach verification.
+
+---
+
+## The Prime Counting Function $\pi(x)$
+
+$\pi(x)$ counts the number of primes $\leq x$. Selected exact values:
+
+| $x$                 | $\pi(x)$          | In this repo?                    |
+|---------------------|-------------------|----------------------------------|
+| $10$                | $4$               | ✓                                |
+| $10^2$              | $25$              | ✓                                |
+| $10^3$              | $168$             | ✓                                |
+| $10^4$              | $1{,}229$         | ✓                                |
+| $10^5$              | $9{,}592$         | ✓                                |
+| $10^6$              | $78{,}498$        | ✓                                |
+| $10^7$              | $664{,}579$       | ✓                                |
+| $10^8$              | $5{,}761{,}455$   | ✓                                |
+| $10^9$              | $50{,}847{,}534$  | ✓                                |
+| $10^{10}$           | $455{,}052{,}511$ | ✓                                |
+| $22{,}801{,}763{,}489$ | $10^9$         | ✓ last prime (file `1000000k`)   |
+| $10^{11}$           | $4{,}118{,}054{,}813$ | —                            |
+| $10^{12}$           | $37{,}607{,}912{,}018$ | —                           |
 
 Source: [OEIS A006880](https://oeis.org/A006880).
 
@@ -103,33 +163,33 @@ A sharper approximation uses the **logarithmic integral**:
 
 $$\pi(x) \approx \mathrm{Li}(x) = \int_2^x \frac{dt}{\ln t}$$
 
-`Li(x)` consistently overestimates `π(x)` for all known x, but **Skewes' number** (≈ e^e^e^79 ≈ 10^(10^34)) is a bound beyond which the inequality may first reverse — one of the largest numbers with a concrete mathematical meaning.
+$\text{Li}(x)$ consistently overestimates $\pi(x)$ for all known $x$, but **Skewes' number** ($\approx e^{e^{e^{79}}} \approx 10^{10^{34}}$) is a bound beyond which the inequality may first reverse — one of the largest numbers with a concrete mathematical meaning.
 
 ---
 
 ## Euclid's Proof of Infinitely Many Primes
 
-Assume there are finitely many primes p₁, p₂, …, pₙ. Form:
+Assume there are finitely many primes $p_1, p_2, \ldots, p_n$. Form:
 
 $$N = p_1 \cdot p_2 \cdots p_n + 1$$
 
-N is either prime itself, or has a prime factor that divides N but not any pᵢ (since each pᵢ leaves remainder 1). Either way, a new prime exists — contradiction. ∎
+$N$ is either prime itself, or has a prime factor that divides $N$ but not any $p_i$ (since each $p_i$ leaves remainder 1). Either way, a new prime exists — contradiction. $\blacksquare$
 
 ---
 
 ## Dirichlet's Theorem on Primes in Arithmetic Progressions
 
-For any two coprime positive integers `a` and `d` (gcd(a, d) = 1), there are infinitely many primes of the form:
+For any two coprime positive integers $a$ and $d$ with $\gcd(a, d) = 1$, there are infinitely many primes of the form:
 
 $$p = a + nd, \quad n = 0, 1, 2, \ldots$$
 
-For example, there are infinitely many primes ending in `1`, `3`, `7`, or `9` — each residue class mod 10 contains the same asymptotic density `1/φ(10) = 1/4` of primes.
+For example, there are infinitely many primes ending in 1, 3, 7, or 9 — each residue class mod 10 contains the same asymptotic density $1/\varphi(10) = 1/4$ of primes.
 
 ---
 
 ## Bertrand's Postulate
 
-For every integer n > 1, there exists at least one prime p with:
+For every integer $n > 1$, there exists at least one prime $p$ with:
 
 $$n < p < 2n$$
 
@@ -153,11 +213,11 @@ As of 2026, more than **10 trillion** non-trivial zeros have been computed and a
 
 ## Mersenne Primes
 
-A **Mersenne prime** is a prime of the form `Mₙ = 2ⁿ − 1`. n must itself be prime (though not every prime n yields a Mersenne prime). Known Mersenne primes visible in this repo:
+A **Mersenne prime** is a prime of the form $M_n = 2^n - 1$. $n$ must itself be prime (though not every prime $n$ yields a Mersenne prime). Known Mersenne primes visible in this repo:
 
-- M₂ = **3**, M₃ = **7**, M₅ = **31**, M₇ = **127**, M₁₃ = **8,191**, M₁₇ = **131,071**, M₁₉ = **524,287**
+$$M_2 = 3, \quad M_3 = 7, \quad M_5 = 31, \quad M_7 = 127, \quad M_{13} = 8{,}191, \quad M_{17} = 131{,}071, \quad M_{19} = 524{,}287, \quad M_{31} = 2{,}147{,}483{,}647$$
 
-The largest known prime (as of early 2024) is the Mersenne prime **2^136,279,841 − 1**, discovered by Luke Durant — a number with over 41 million digits.
+The largest known prime (as of 2024) is the Mersenne prime $2^{136{,}279{,}841} - 1$, discovered by Luke Durant — a number with over **41 million digits**.
 
 The [Great Internet Mersenne Prime Search (GIMPS)](https://www.mersenne.org/) coordinates the search.
 
@@ -165,9 +225,9 @@ The [Great Internet Mersenne Prime Search (GIMPS)](https://www.mersenne.org/) co
 
 ## Twin Primes
 
-**Twin primes** are pairs `(p, p+2)` where both are prime. Examples within this repo:
+**Twin primes** are pairs $(p,\, p+2)$ where both are prime. Examples within this repo:
 
-`(3,5), (5,7), (11,13), (17,19), (29,31), (41,43), (1,000,037, 1,000,039) …`
+$$(3, 5),\; (5, 7),\; (11, 13),\; (17, 19),\; (29, 31),\; (41, 43),\; (1{,}000{,}037,\; 1{,}000{,}039),\; \ldots$$
 
 The **Twin Prime Conjecture** states there are infinitely many such pairs. Unproven. **Yitang Zhang** (2013) proved there are infinitely many prime pairs with gap < 70,000,000 — later reduced to 246 by the Polymath project. The gap remains finite but closing it to 2 is an open problem.
 
@@ -175,7 +235,11 @@ The **Twin Prime Conjecture** states there are infinitely many such pairs. Unpro
 
 ## Sophie Germain Primes
 
-A prime p is a **Sophie Germain prime** if `2p + 1` is also prime. The second prime, `2p + 1`, is called a **safe prime**. Examples: 2, 3, 5, 11, 23, 29, 41, 53, 83, 89. Safe primes are important in cryptography (Diffie-Hellman key exchange, discrete logarithm hardness).
+A prime $p$ is a **Sophie Germain prime** if $2p + 1$ is also prime. The second prime, $2p + 1$, is called a **safe prime**. Examples:
+
+$$2,\; 3,\; 5,\; 11,\; 23,\; 29,\; 41,\; 53,\; 83,\; 89,\; \ldots$$
+
+Safe primes are critical in cryptography — they ensure the multiplicative group $\mathbb{Z}/p\mathbb{Z}^*$ has a large prime-order subgroup, which hardens Diffie-Hellman key exchange and discrete logarithm schemes against Pohlig-Hellman attacks.
 
 ---
 
@@ -183,11 +247,68 @@ A prime p is a **Sophie Germain prime** if `2p + 1` is also prime. The second pr
 
 Every even integer greater than 2 can be expressed as the sum of two primes:
 
-```
-4 = 2+2,  6 = 3+3,  8 = 3+5,  100 = 3+97,  1,000,000 = 17+999,983
-```
+$$4 = 2+2, \quad 6 = 3+3, \quad 8 = 3+5, \quad 100 = 3+97, \quad 10^6 = 17 + 999{,}983$$
 
-Proposed by **Christian Goldbach** (1742), verified computationally up to 4 × 10¹⁸ (2014), but unproven in general. One of the oldest open problems in mathematics.
+Proposed by **Christian Goldbach** (1742), verified computationally up to $4 \times 10^{18}$ (Oliveira e Silva, 2014), but unproven in general. One of the oldest open problems in mathematics.
+
+The **weak Goldbach conjecture** (every odd integer > 5 is the sum of three primes) was proved by **Harald Helfgott** in 2013.
+
+---
+
+## Prime Gaps
+
+The **prime gap** after a prime $p_n$ is $g_n = p_{n+1} - p_n$. The average gap near $x$ is approximately $\ln x$ (a consequence of the PNT), but individual gaps fluctuate dramatically.
+
+**Cramér's conjecture** (1936) predicts the maximal gap near $x$ is bounded by:
+
+$$g(x) = O\!\left((\ln x)^2\right)$$
+
+Selected record gaps visible in this repository:
+
+| Gap | After prime $p$    | Approx. $(\ln p)^2$ | Ratio $g / (\ln p)^2$ |
+|-----|--------------------|----------------------|------------------------|
+| 72  | 31,397             | 107                  | 0.67                   |
+| 112 | 396,733            | 166                  | 0.67                   |
+| 148 | 2,010,733          | 210                  | 0.70                   |
+| 220 | 13,256,063         | 269                  | 0.82                   |
+| 282 | 265,621,549        | 375                  | 0.75                   |
+| 288 | 436,273,009        | 396                  | 0.73                   |
+| 312 | 2,300,942,549      | 468                  | 0.67                   |
+
+Source: [OEIS A005250 — Increasing gaps between primes](https://oeis.org/A005250).
+
+The **merit** of a gap is $g / \ln p$, which normalizes by the expected gap. The highest known merits approach $\sim 40$.
+
+---
+
+## Fermat Primes
+
+**Fermat numbers** have the form:
+
+$$F_n = 2^{2^n} + 1$$
+
+Fermat conjectured all are prime. Only **five** Fermat primes are known:
+
+$$F_0 = 3, \quad F_1 = 5, \quad F_2 = 17, \quad F_3 = 257, \quad F_4 = 65{,}537$$
+
+All five appear in this repository. $F_5 = 4{,}294{,}967{,}297 = 641 \times 6{,}700{,}417$ is composite (shown by **Euler**, 1732). Every Fermat number tested since $F_4$ has been composite.
+
+Fermat primes are significant because a regular $n$-gon is constructible by compass and straightedge **if and only if** $n$ is a power of 2 times a product of distinct Fermat primes (the **Gauss-Wantzel theorem**).
+
+---
+
+## The Sieve of Eratosthenes
+
+The algorithm used to generate this entire repository. Dating to **~240 BCE**, it remains one of the most efficient methods for enumerating all primes up to a bound $N$:
+
+1. List all integers from 2 to $N$.
+2. Starting with the smallest unmarked number $p$ (initially 2):
+   - Mark all multiples $p^2, p^2 + p, p^2 + 2p, \ldots \leq N$ as composite.
+   - Advance to the next unmarked number.
+3. Repeat until $p^2 > N$.
+4. All remaining unmarked numbers are prime.
+
+Complexity: $O(N \log \log N)$ time, $O(N)$ space. The **segmented sieve** (used by `primesieve`) reduces space to $O(\sqrt{N})$ by processing intervals of size $\sqrt{N}$ at a time.
 
 ---
 
@@ -195,11 +316,12 @@ Proposed by **Christian Goldbach** (1742), verified computationally up to 4 × 1
 
 | Test | Type | Notes |
 |------|------|-------|
-| Trial division | Deterministic | O(√n); practical up to ~10⁷ |
-| Sieve of Eratosthenes | Deterministic | Best for all primes up to N |
-| Miller-Rabin | Probabilistic | Fast; used in practice with multiple witnesses |
-| AKS | Deterministic polynomial | Proved polynomial time in 2002 (Agrawal, Kayal, Saxena) |
-| Lucas-Lehmer | Deterministic for Mₙ | Used by GIMPS for Mersenne primes |
+| Trial division | Deterministic | $O(\sqrt{n})$; practical up to $\sim 10^7$ |
+| Sieve of Eratosthenes | Deterministic | $O(n \log \log n)$; best for all primes up to $N$ |
+| Miller-Rabin | Probabilistic | $O(k \log^2 n)$; used in practice with $k$ random witnesses |
+| AKS | Deterministic polynomial | $\tilde{O}(\log^6 n)$; proved polynomial time in 2002 (Agrawal, Kayal, Saxena) |
+| Lucas-Lehmer | Deterministic for $M_n$ | $O(n^2 \log n)$; used by GIMPS for Mersenne primes |
+| BPSW | Probabilistic (no known counterexample) | Combines Miller-Rabin base-2 + strong Lucas test |
 
 All primes in this repository were generated by [`primesieve`](https://github.com/kimwalisch/primesieve) by Kim Walisch — a production-grade implementation of the **segmented Sieve of Eratosthenes** with wheel factorization, widely regarded as the fastest prime generator available. It generated all 1,000,000,000 primes in this repository in under 3 minutes on a modern CPU.
 
@@ -210,20 +332,26 @@ All primes in this repository were generated by [`primesieve`](https://github.co
 | Prime          | Why notable |
 |----------------|-------------|
 | 2              | Only even prime |
-| 3, 5, 7        | Only prime triple (3 consecutive odd primes possible) |
-| 127            | Mersenne prime M₇ = 2⁷ − 1 |
-| 131,071        | Mersenne prime M₁₇ = 2¹⁷ − 1 |
-| 524,287        | Mersenne prime M₁₉ = 2¹⁹ − 1 |
-| 8,191          | Mersenne prime M₁₃ = 2¹³ − 1 |
-| 1,000,003      | First prime > 10⁶ |
+| 3              | Smallest odd prime; also Mersenne prime $M_2$ and Fermat prime $F_0$ |
+| 5              | Fermat prime $F_1 = 2^{2^1} + 1$ |
+| 7              | Mersenne prime $M_3 = 2^3 - 1$ |
+| 17             | Fermat prime $F_2 = 2^{2^2} + 1$ |
+| 31             | Mersenne prime $M_5 = 2^5 - 1$ |
+| 127            | Mersenne prime $M_7 = 2^7 - 1$; also a Mersenne exponent itself |
+| 257            | Fermat prime $F_3 = 2^{2^3} + 1$ |
+| 8,191          | Mersenne prime $M_{13} = 2^{13} - 1$ |
+| 65,537         | Fermat prime $F_4 = 2^{2^4} + 1$; largest known Fermat prime |
+| 131,071        | Mersenne prime $M_{17} = 2^{17} - 1$ |
+| 524,287        | Mersenne prime $M_{19} = 2^{19} - 1$ |
+| 1,000,003      | First prime $> 10^6$ |
 | 1,299,709      | The 100,000th prime |
 | 7,368,787      | The 500,000th prime |
 | 15,485,863     | The 1,000,000th prime |
 | 179,424,673    | The 10,000,000th prime |
 | 982,451,653    | The 50,000,000th prime |
-| 1,000,000,007  | First prime > 10⁹ (one billion) |
+| 1,000,000,007  | First prime $> 10^9$ |
 | 2,038,074,743  | The 100,000,000th prime |
-| 2,147,483,647  | Mersenne prime M₃₁ = 2³¹ − 1 (also max signed 32-bit int) |
+| 2,147,483,647  | Mersenne prime $M_{31} = 2^{31} - 1$; also the max signed 32-bit integer |
 | 4,222,234,741  | The 200,000,000th prime |
 | 11,037,271,757 | The 500,000,000th prime |
 | 22,801,763,489 | The 1,000,000,000th prime — largest prime in this repo |
@@ -232,29 +360,48 @@ All primes in this repository were generated by [`primesieve`](https://github.co
 
 ## Wilson's Theorem
 
-A number p > 1 is prime **if and only if**:
+A number $p > 1$ is prime **if and only if**:
 
 $$(p-1)! \equiv -1 \pmod{p}$$
 
-This gives a perfect primality criterion but is computationally impractical (factorial grows faster than any exponential). It is primarily of theoretical interest.
+For example, $4! = 24 \equiv -1 \pmod{5}$ confirms 5 is prime, while $5! = 120 \equiv 0 \pmod{6}$ shows 6 is not. This gives a perfect primality criterion but is computationally impractical — $(p-1)!$ requires $\Omega(p)$ multiplications. It is primarily of theoretical interest.
 
 ---
 
 ## References & Further Reading
 
-- [Prime number — Wikipedia](https://en.wikipedia.org/wiki/Prime_number)
-- [Prime Number Theorem — Wikipedia](https://en.wikipedia.org/wiki/Prime_number_theorem)
-- [Riemann Hypothesis — Wikipedia](https://en.wikipedia.org/wiki/Riemann_hypothesis)
-- [Riemann zeta function — Wikipedia](https://en.wikipedia.org/wiki/Riemann_zeta_function)
-- [Euclid–Euler theorem — Wikipedia](https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem)
-- [Mersenne prime — Wikipedia](https://en.wikipedia.org/wiki/Mersenne_prime)
-- [Twin prime conjecture — Wikipedia](https://en.wikipedia.org/wiki/Twin_prime)
-- [Goldbach's conjecture — Wikipedia](https://en.wikipedia.org/wiki/Goldbach%27s_conjecture)
-- [Dirichlet's theorem — Wikipedia](https://en.wikipedia.org/wiki/Dirichlet%27s_theorem_on_arithmetic_progressions)
+**Sequences & databases:**
 - [OEIS A000040 — The prime numbers](https://oeis.org/A000040)
 - [OEIS A006880 — π(10^n)](https://oeis.org/A006880)
+- [OEIS A005250 — Increasing gaps between primes](https://oeis.org/A005250)
+- [OEIS A019434 — Fermat primes](https://oeis.org/A019434)
 - [The Prime Pages — primes.utm.edu](https://primes.utm.edu/)
 - [Great Internet Mersenne Prime Search (GIMPS)](https://www.mersenne.org/)
-- [Millennium Prize: Riemann Hypothesis — Clay Math Institute](https://www.claymath.org/millennium/riemann-hypothesis/)
-- *An Introduction to the Theory of Numbers* — Hardy & Wright
+
+**Key Wikipedia articles:**
+- [Prime number](https://en.wikipedia.org/wiki/Prime_number)
+- [Prime Number Theorem](https://en.wikipedia.org/wiki/Prime_number_theorem)
+- [Riemann Hypothesis](https://en.wikipedia.org/wiki/Riemann_hypothesis)
+- [Riemann zeta function](https://en.wikipedia.org/wiki/Riemann_zeta_function)
+- [Mersenne prime](https://en.wikipedia.org/wiki/Mersenne_prime)
+- [Fermat number](https://en.wikipedia.org/wiki/Fermat_number)
+- [Twin prime conjecture](https://en.wikipedia.org/wiki/Twin_prime)
+- [Goldbach's conjecture](https://en.wikipedia.org/wiki/Goldbach%27s_conjecture)
+- [Prime gap](https://en.wikipedia.org/wiki/Prime_gap)
+- [Dirichlet's theorem](https://en.wikipedia.org/wiki/Dirichlet%27s_theorem_on_arithmetic_progressions)
+- [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)
+- [RSA cryptosystem](https://en.wikipedia.org/wiki/RSA_(cryptosystem))
+
+**Millennium Prize:**
+- [Riemann Hypothesis — Clay Mathematics Institute](https://www.claymath.org/millennium/riemann-hypothesis/)
+
+**Books:**
+- *An Introduction to the Theory of Numbers* — G.H. Hardy & E.M. Wright
 - *The Music of the Primes* — Marcus du Sautoy
+- *Prime Obsession: Bernhard Riemann and the Greatest Unsolved Problem in Mathematics* — John Derbyshire
+- *The Little Book of Bigger Primes* — Paulo Ribenboim
+
+**Tools:**
+- [`primesieve`](https://github.com/kimwalisch/primesieve) — Fast prime generator used to create this dataset
+- [`sympy.isprime()`](https://docs.sympy.org/) — Python primality testing
+- [SageMath](https://www.sagemath.org/) — Open-source mathematics software
